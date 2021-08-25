@@ -39,7 +39,6 @@ Route::group(['prefix'=>'admin'], function() {
     Route::get('/posts','PostController@adminIndex')->name('adminPostList');
     Route::get('/posts/add','PostController@createForm')->name('adminPostAddForm');
     Route::post('/posts/add','PostController@create')->name('adminPostAdd');
-    Route::get('/posts/{title}','PostController@adminDetail')->name('adminPostDetail');
     Route::get('/posts/{id}/edit','PostController@editForm')->name('adminPostEditform');
     Route::patch('/posts/{id}/edit','PostController@edit')->name('adminPostEdit');
     Route::delete('/posts/{id}','PostController@remove')->name('adminPostDelete');

@@ -28,11 +28,6 @@ class PostController extends Controller
         return view('posts/detail',['post' => Post::where(['title' => $title])->firstOrFail()]);
     }
 
-    public function adminDetail(string $title)
-    {
-        return view('admin/posts/detail',['post' => Post::where(['title' => $title])->firstOrFail()]);
-    }
-
     public function create(Request $request)
     {
         $post = new Post();

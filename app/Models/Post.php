@@ -22,9 +22,6 @@ class Post extends Model
 
     public function displayLink(bool $admin = false)
     {
-        if ($admin) {
-            return "/admin/posts/". $this->title;
-        }
         return "/posts/" . $this->title;
     }
 
