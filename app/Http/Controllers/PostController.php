@@ -30,13 +30,14 @@ class PostController extends Controller
 
     public function create(Request $request)
     {
-        $post = new Post();
-        $post->title = $request->title;
-        $post->slug = $request->slug;
-        $post->text = $request->text;
-        $post->id_user = (Auth::user())->id;
+        $post = new Post([
+            'title' => $request->title,
+            'slug' => $request->slug,
+            'text' => $request->text
+        ]);
+        $post->author()->associate(Auth::user());
         $post->save();
-        return redirect('/admin/posts/'.$post->title);
+        return redirect('/admin/posts/');
     }
 
     public function createForm()
@@ -56,6 +57,7 @@ class PostController extends Controller
 
     public function editForm(int $id)
     {
+        $this->authorize('update',Post::findOrFail($id));
         return view('/admin/posts/form',['post' => Post::findOrFail($id)]);
     }
 

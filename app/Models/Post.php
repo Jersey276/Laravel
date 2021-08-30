@@ -15,9 +15,14 @@ class Post extends Model
         'text'
     ];
 
-    public function user()
+    public function author()
     {
         return $this->belongsTo(User::class, 'id_user');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 
     public function displayLink(bool $admin = false)

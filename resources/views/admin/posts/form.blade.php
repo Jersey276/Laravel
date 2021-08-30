@@ -8,8 +8,8 @@
         <textarea name="text">{{ $post->text }}</textarea>
     @else
         <form method="post" action="/admin/posts/add">
-        <input type="text" name="title">
-        <input type="text" name="slug">
+            <input type="text" name="title">
+            <input type="text" name="slug">
         <textarea name="text"></textarea>
     @endif
     @csrf

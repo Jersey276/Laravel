@@ -28,6 +28,7 @@ Route::get('/', 'HomeController@index')->name('home');
 //PostController, Post system
 Route::get('/posts','PostController@index')->name('postList');
 Route::get('/posts/{title}','PostController@detail')->name('postDetail');
+Route::post('/posts/{title}','CommentController@store')->name('commentAdd');
 
 
 //Admin group functions
