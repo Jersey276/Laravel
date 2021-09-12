@@ -36,7 +36,11 @@ class PostController extends Controller
             'text' => $request->text
         ]);
         $post->author()->associate(Auth::user());
-        $post->save();
+        if($post->save()) {
+            $this->successFlash($request, 'Le post à été crée');
+        } else {
+            $this->errorFlash($request, 'Le post n\'a pu être crée');
+        }
         return redirect('/admin/posts/');
     }
 
@@ -47,11 +51,17 @@ class PostController extends Controller
 
     public function edit(Request $request, int $id)
     {
-        Post::find($id)->update([
+        /** @var Post $post */
+        $post = Post::find($id);
+        if ($post->update([
         'title' => $request->title,
         'slug' => $request->slug,
         'text' => $request->text
-        ]);
+        ])) {
+            $this->successFlash($request, 'Le post '. $post->title.' à été mis à jour');
+        } else {
+            $this->errorFlash($request, 'Le post '. $post->title.' n\'a pu être mis à jour');
+        }
         return redirect((Post::find($id))->displayLink(true));
     }
 
@@ -61,9 +71,15 @@ class PostController extends Controller
         return view('/admin/posts/form',['post' => Post::findOrFail($id)]);
     }
 
-    public function remove(int $id)
+    public function remove(int $id, Request $request)
     {
-        (Post::findOrFail($id))->delete();
+        /** @var Post $post */
+        $post = Post::findOrFail($id);
+        if ($post->delete()) {
+            $this->successFlash($request, 'Le post '. $post->title.' à été supprimé');
+        } else {
+            $this->errorFlash($request, 'Le post '. $post->title.' n\'a pu être supprimé');
+        }
         return redirect('/admin/posts/');
     }
 }

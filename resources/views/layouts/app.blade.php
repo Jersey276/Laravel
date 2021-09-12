@@ -25,6 +25,7 @@
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
+                <img src="{{ asset('img/profile.webp')}}" alt="image tristan" style="width:80px; height:80px">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     Tristan Lefèvre
                 </a>
@@ -34,12 +35,14 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
-
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('postList')}}">{{__('Posts')}}</a>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
+                    <ul class="navbar-nav ms-auto">
                         <!-- Authentication Links -->
                         @guest
                             @if (Route::has('login'))
