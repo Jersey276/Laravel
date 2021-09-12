@@ -22,4 +22,9 @@ class Comment extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function removeLink()
+    {
+        return '/admin/posts/'. $this->post()->first()->id .'/comments/'.$this->id;
+    }
 }

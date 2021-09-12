@@ -2,16 +2,13 @@
 
 @section('content')
     @if(!empty($posts))
-    <ul>
+    <div class="list-group">
         @foreach($posts as $post)
-            <li>
-                <div>
-                <a href="{{ $post->displayLink()}}"><h2>{{ $post->title }}</h2></a>
+                <a class="list-group-item list-group-item-action" href="{{ $post->displayLink()}}"><h2>{{ $post->title }}</h2>
                     {{ $post->slug }}
-                </div>
-            </li>
+                </a>
         @endforeach
-    </ul>
+    </div>
     @else
         aucun post disponible
     @endif

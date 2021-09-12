@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
+    public function index(int $id)
+    {
+        return view('/admin/comments/list', ['post' => Post::findorfail($id)]);
+    }
     public function store(String $title, Request $request)
     {
         /** @var Post $post */
@@ -20,18 +24,18 @@ class CommentController extends Controller
         ]);
         $comment->author()->associate($user);
         $comment->post()->associate($post);
-        $comment->save();
+        if ($comment->save()) {
+            $this->successFlash($request, 'le commentaire à été posté avec succès');
+        } else {
+            $this->errorFlash($request, 'une erreur à empêcher de poster le commentaire');
+        }
         
         return redirect($post->displayLink());
     }
 
-    public function edit(String $title, Request $request)
+    public function remove(int $id, int $commentId)
     {
-        
-    }
-
-    public function remove(String $title)
-    {
-
+        (Comment::findorfail($commentId))->delete();
+        return redirect('/admin/posts/'.$id.'/comments');
     }
 }

@@ -16,7 +16,12 @@
 
                 </form><br>
                 <div class="mt-auto btn-group">
-                    <a class="btn btn-warning" href="{{ $post->modifyLink() }}">modifier</a><br>
+                    <a class="btn btn-warning" href="{{ $post->commentsListLink() }}">Commentaires
+                        @if ($post->nbComments() > 0)
+                            <span class="badge bg-secondary">{{ $post->nbComments() }}</span>
+                        @endif
+                    </a>
+                    <a class="btn btn-warning" href="{{ $post->modifyLink() }}">modifier</a>
                     <button class="btn btn-danger" type="submit" form="removeForm-{{ $post->id }}">supprimer</button>
                 </div>
             </li>

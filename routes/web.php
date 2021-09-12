@@ -43,4 +43,9 @@ Route::group(['prefix'=>'admin'], function() {
     Route::get('/posts/{id}/edit','PostController@editForm')->name('adminPostEditform');
     Route::patch('/posts/{id}/edit','PostController@edit')->name('adminPostEdit');
     Route::delete('/posts/{id}','PostController@remove')->name('adminPostDelete');
+
+    //Admin CommentController, admin Comment system
+    Route::get('/posts/{id}/comments','CommentController@index')->name('adminCommentList');
+    Route::delete('/posts/{id}/comments/{commentId}','CommentController@remove')->name('adminCommentList');
+
 });

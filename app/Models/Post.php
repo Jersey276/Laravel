@@ -39,4 +39,14 @@ class Post extends Model
     {
         return "/admin/posts/". $this->id;
     }
+
+    public function commentsListLink()
+    {
+        return "/admin/posts/". $this->id . "/comments";
+    }
+
+    public function nbComments()
+    {
+        return $this->comments()->count();
+    }
 }
