@@ -6,7 +6,7 @@
         <p class="card-subtitle">{{ $post->slug }}</p>
     </div>
     <div class="card-body">
-        <p class="card-text">{{ $post->text }}</p>
+        <p class="card-text">{!! nl2br(e($post->text)) !!}</p>
     </div>
     <div class="card-footer">
         {{ $post->author->name }} le {{ $post->created_at }}
