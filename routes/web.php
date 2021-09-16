@@ -48,4 +48,15 @@ Route::group(['prefix'=>'admin'], function() {
     Route::get('/posts/{id}/comments','CommentController@index')->name('adminCommentList');
     Route::delete('/posts/{id}/comments/{commentId}','CommentController@remove')->name('adminCommentList');
 
+    //Admin UserController, admin User system
+    Route::get('/users','UserController@index')->name('userList');
+    Route::get('/users/{name}','UserController@editForm')->name('userEditForm');
+    Route::patch('/users/{name}','UserController@edit')->name('userEdit');
+
+    Route::get('/roles','RoleController@index')->name('roleList');
+    Route::get('/roles/add','RoleController@createForm')->name('roleCreateForm');
+    Route::post('/roles/add','RoleController@create')->name('roleCreate');
+    Route::get('/roles/{name}','RoleController@editForm')->name('roleEditForm');
+    Route::patch('/roles/{name}','RoleController@edit')->name('roleEdit');
+    Route::delete('/roles/{name}','RoleController@remove')->name('roleRemove');
 });
