@@ -30,9 +30,9 @@
                             {{ $role->name }}
                         </td>
                         <td class="">
-                            @isset($role->parents)
+                            @if(json_decode($role->parents) != null)
                                 {{ implode(', ', json_decode($role->parents) )}}
-                            @endisset
+                            @endif
                         </td>
                         <td class="d-flex flex-row">
                             <a class="btn btn-warning" href="{{$role->editLink()}}">Modifier</a>

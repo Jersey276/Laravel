@@ -138,7 +138,7 @@
                     </div>
                     <div class="accordion-item">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cv-collapse"  aria-expanded="false" aria-controls="cv-collapse">
-                            Projets
+                            CV
                         </button>
                         <ul id="cv-collapse" class="accordion-collapse collapse list-group-flush mb-0"  data-bs-parent="#admin-offcanvas-accordion">
                             <li class="list-group-item">
