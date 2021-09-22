@@ -53,12 +53,12 @@ class PostPolicy
      */
     public function update(User $user, Post $post)
     {
-        return $user->id === $post->author()->id;
+        return $user->id === $post->author->id;
     }
 
     public function updateForm(User $user, Post $post)
     {
-        return $user->id === $post->author()->id;
+        return $user->id === $post->author->id;
     }
 
     /**
@@ -70,7 +70,7 @@ class PostPolicy
      */
     public function delete(User $user, Post $post)
     {
-        return $user->id === $post->author()->id;
+        return $user->id === $post->author->id;
     }
 
     /**
@@ -82,7 +82,7 @@ class PostPolicy
      */
     public function restore(User $user, Post $post)
     {
-        return $user->id === $post->author()->id;
+        return $user->id === $post->author->id;
     }
 
     /**
@@ -94,6 +94,6 @@ class PostPolicy
      */
     public function forceDelete(User $user, Post $post)
     {
-        return $user->id === $post->author()->id;
+        return $user->id === $post->author->id;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Managers\RuleManager;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -41,13 +42,28 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function Posts()
+    public function posts()
     {
         return $this->hasMany(Post::class);
     }
 
-    public function Comments()
+    public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+    
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'role_name');
+    }
+
+    public function adminEditLink()
+    {
+        return '/admin/users/' . $this->name;
+    }
+
+    public function rules(String $name) : bool
+    {
+        return RuleManager::checkRule($name, $this);
     }
 }
