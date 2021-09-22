@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Managers\RuleManager;
 use App\Models\User;
 use App\Models\Post;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -11,29 +12,6 @@ class PostPolicy
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view any models.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function viewAny(User $user)
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can view the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function view(User $user, Post $post)
-    {
-        //
-    }
-
-    /**
      * Determine whether the user can create models.
      *
      * @param  \App\Models\User  $user
@@ -41,7 +19,7 @@ class PostPolicy
      */
     public function create(User $user)
     {
-        //
+        return RuleManager::checkRule('post_crud',$user);
     }
 
     /**
@@ -53,12 +31,7 @@ class PostPolicy
      */
     public function update(User $user, Post $post)
     {
-        return $user->id === $post->author->id;
-    }
-
-    public function updateForm(User $user, Post $post)
-    {
-        return $user->id === $post->author->id;
+        return $user->id === $post->author->id || RuleManager::checkRule('post_admin',$user);
     }
 
     /**
@@ -70,7 +43,7 @@ class PostPolicy
      */
     public function delete(User $user, Post $post)
     {
-        return $user->id === $post->author->id;
+        return $user->id === $post->author->id || RuleManager::checkRule('post_admin',$user);
     }
 
     /**
@@ -82,7 +55,7 @@ class PostPolicy
      */
     public function restore(User $user, Post $post)
     {
-        return $user->id === $post->author->id;
+        return $user->id === $post->author->id || RuleManager::checkRule('post_admin',$user);
     }
 
     /**
@@ -94,6 +67,6 @@ class PostPolicy
      */
     public function forceDelete(User $user, Post $post)
     {
-        return $user->id === $post->author->id;
+        return $user->id === $post->author->id || RuleManager::checkRule('post_admin',$user);
     }
 }
