@@ -21,7 +21,14 @@
             <td>{{ $user->name }}</td>
             <td>{{ $user->email }}</td>
             <td>{{ $user->role->name }}</td>
-            <td><a class="btn btn-warning" href="{{ $user->adminEditLink() }}">modifier</a></td>
+            <td class="d-flex flex-row">
+                <a class="btn btn-warning" href="{{ $user->adminEditLink() }}">modifier</a>
+                <form method="post" action="{{ $user->adminEditLink() }}">
+                    @csrf
+                    @method('delete')
+                    <input type="submit" class="btn btn-danger" value="Supprimer">
+                </form>
+            </td>
         </tr>
     @endforeach
 </div>

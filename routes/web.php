@@ -52,6 +52,7 @@ Route::group(['prefix'=>'admin', 'middleware' => 'auth'], function() {
         Route::get('/', 'UserController@index')->name('userList');
         Route::get('/{name}', 'UserController@editForm')->name('userEditForm');
         Route::patch('/{name}', 'UserController@edit')->name('userEdit');
+        Route::delete('/{name}', 'UserController@remove')->name('userRemove');
     });
 
     //Admin RoleController, admin Role System
