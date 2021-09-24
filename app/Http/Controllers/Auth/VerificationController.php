@@ -44,7 +44,7 @@ class VerificationController extends Controller
 
     public function notice()
     {
-        return view('auth:verify-email');
+        return view('auth\verify');
     }
 
     public function verify(EmailVerificationRequest $request)
@@ -54,7 +54,7 @@ class VerificationController extends Controller
         return redirect('/');
     }
 
-    public function send(Request $request)
+    public function resend(Request $request)
     {
         $request->user()->sendEmailVerificationNotification();
 

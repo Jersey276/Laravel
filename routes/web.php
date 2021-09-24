@@ -20,18 +20,22 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 // Auth/VerificationController, User Email Verification system
-Route::group(['prefix' => 'email'], function() {
-    Route::get('/verify', 'Auth\VerificationController@notice')->middleware('auth')->name('verification.notice');
-    Route::get('/verify/{id}/{hash}', 'Auth\VerificationController@verify')->middleware(['auth', 'signed'])->name('verification.verify');
-    Route::post('/verification-notification', 'Auth\VerificationController@send')->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+Route::group(['prefix' => 'email', 'middleware' => 'auth'], function() {
+    Route::get('/verify', 'Auth\VerificationController@notice')->name('verification.notice');
+    Route::get('/verify/{id}/{hash}', 'Auth\VerificationController@verify')->middleware('signed')->name('verification.verify');
+    Route::post('/verification-notification', 'Auth\VerificationController@resend')->middleware('throttle:6,1')->name('verification.resend');
 });
 
-// Auth/ForgotPasswordController, Password ask reset system
-Route::get('/forgot-password', 'Auth\ForgotPasswordController@request')->middleware('guest')->name('password.request');
-Route::post('/forgot-password', 'Auth\ForgotPasswordController@update')->middleware('guest')->name('password.email');
+Route::group(['prefix' => 'forgot-password', 'middleware' => 'guest'], function() {
+    // Auth/ForgotPasswordController, Password ask reset system
+    Route::get('/', 'Auth\ForgotPasswordController@request')->name('password.request');
+    Route::post('/', 'Auth\ForgotPasswordController@update')->name('password.email');
+});
 
-Route::get('/reset-password/{token}', 'Auth\ResetPasswordController@reset')->middleware('guest')->name('password.reset');
-Route::post('/reset-password', 'Auth\ResetPasswordController@update')->middleware('guest')->name('password.update');
+Route::group(['prefix' => 'reset-password', 'middleware' => 'guest'], function() {
+    Route::get('/{token}', 'Auth\ResetPasswordController@reset')->name('password.reset');
+    Route::post('/', 'Auth\ResetPasswordController@update')->name('password.update');
+});
 
 
 // HomeController , homepage system
@@ -41,12 +45,12 @@ Route::get('/', 'HomeController@index')->name('home');
 Route::group(['prefix' => 'posts'], function() {
     Route::get('/', 'PostController@index')->name('postList');
     Route::get('/{title}', 'PostController@detail')->name('postDetail');
-    Route::post('/{title}', 'CommentController@store')->name('commentAdd')->middleware(['auth', ('rules:comment_crud')]);
+    Route::post('/{title}', 'CommentController@store')->name('commentAdd')->middleware(['auth', 'rules:comment_crud','verified']);
 });
 
 
 //Admin group functions
-Route::group(['prefix'=>'admin', 'middleware' => 'auth'], function() {
+Route::group(['prefix'=>'admin', 'middleware' => ['auth','verified']], function() {
     //Admin homepage
     Route::get('/','HomeController@adminIndex')->name('adminHomepage');
 
