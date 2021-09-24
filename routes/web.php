@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -16,6 +18,10 @@ use Illuminate\Support\Facades\Route;
 
 // all auth routes
 Auth::routes();
+Route::get('/email/verify', 'Auth/VerificationController@notice')->middleware('auth')->name('verification.notice');
+Route::get('/email/verify/{id}/{hash}', 'Auth/VerificationController@verify')->middleware(['auth', 'signed'])->name('verification.verify');
+Route::post('/email/verification-notification','Auth/VerificationController@send')->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
 
 // HomeController , homepage system
 Route::get('/', 'HomeController@index')->name('home');

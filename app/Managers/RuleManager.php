@@ -10,19 +10,17 @@ class RuleManager {
     
     public static function checkRule(string $name, User $user) : bool
     {
-
-        if (Rule::find(['name' => $name]) instanceof Rule) {
-            $rule = Rule::firstOrCreate(
+        $rule = Rule::find($name);
+        if (!Rule::find($name) instanceOf Rule) {
+            $rule = Rule::Create(
                 ['name' => $name]
             );
             $rule->roles()->attach(Role::find('admin'));
-        } else {
-            $rule = Rule::find($name);
         }
         // check user direct role
         /** @var User $user */
         $user_role = $user->role;
-        if ($rule->roles->contains($user_role->name)) {
+        if ($rule->roles->contains($user_role)) {
             return true;
         }
         if (json_decode($user_role->parents) != null) {
