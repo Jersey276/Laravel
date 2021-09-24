@@ -24,7 +24,7 @@
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            @if(Auth::user())
+            @if(Auth::user() && Auth::user()->rules('admin_panel'))
                 <a class="btn btn-primary float-left" data-bs-toggle="offcanvas" href="#adminOffCanvas" role="button" aria-controls="offcanvasExample">
                     Admin
                 </a>
@@ -93,7 +93,7 @@
             @yield('content')
         </main>
     </div>
-    @if(Auth::user())
+    @if(Auth::user() && Auth::user()->rules('admin_panel'))
         <div class="offcanvas offcanvas-start" id="adminOffCanvas">
             <div class="offcanvas-header">
                 <h2>Admin</h2>
