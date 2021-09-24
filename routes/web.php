@@ -18,9 +18,20 @@ use Illuminate\Support\Facades\Route;
 
 // all auth routes
 Auth::routes();
-Route::get('/email/verify', 'Auth/VerificationController@notice')->middleware('auth')->name('verification.notice');
-Route::get('/email/verify/{id}/{hash}', 'Auth/VerificationController@verify')->middleware(['auth', 'signed'])->name('verification.verify');
-Route::post('/email/verification-notification','Auth/VerificationController@send')->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
+// Auth/VerificationController, User Email Verification system
+Route::group(['prefix' => 'email'], function() {
+    Route::get('/verify', 'Auth\VerificationController@notice')->middleware('auth')->name('verification.notice');
+    Route::get('/verify/{id}/{hash}', 'Auth\VerificationController@verify')->middleware(['auth', 'signed'])->name('verification.verify');
+    Route::post('/verification-notification', 'Auth\VerificationController@send')->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+});
+
+// Auth/ForgotPasswordController, Password ask reset system
+Route::get('/forgot-password', 'Auth\ForgotPasswordController@request')->middleware('guest')->name('password.request');
+Route::post('/forgot-password', 'Auth\ForgotPasswordController@update')->middleware('guest')->name('password.email');
+
+Route::get('/reset-password/{token}', 'Auth\ResetPasswordController@reset')->middleware('guest')->name('password.reset');
+Route::post('/reset-password', 'Auth\ResetPasswordController@update')->middleware('guest')->name('password.update');
 
 
 // HomeController , homepage system
