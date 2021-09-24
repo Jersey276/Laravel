@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -17,6 +19,25 @@ use Illuminate\Support\Facades\Route;
 // all auth routes
 Auth::routes();
 
+// Auth/VerificationController, User Email Verification system
+Route::group(['prefix' => 'email', 'middleware' => 'auth'], function() {
+    Route::get('/verify', 'Auth\VerificationController@notice')->name('verification.notice');
+    Route::get('/verify/{id}/{hash}', 'Auth\VerificationController@verify')->middleware('signed')->name('verification.verify');
+    Route::post('/verification-notification', 'Auth\VerificationController@resend')->middleware('throttle:6,1')->name('verification.resend');
+});
+
+Route::group(['prefix' => 'forgot-password', 'middleware' => 'guest'], function() {
+    // Auth/ForgotPasswordController, Password ask reset system
+    Route::get('/', 'Auth\ForgotPasswordController@request')->name('password.request');
+    Route::post('/', 'Auth\ForgotPasswordController@update')->name('password.email');
+});
+
+Route::group(['prefix' => 'reset-password', 'middleware' => 'guest'], function() {
+    Route::get('/{token}', 'Auth\ResetPasswordController@reset')->name('password.reset');
+    Route::post('/', 'Auth\ResetPasswordController@update')->name('password.update');
+});
+
+
 // HomeController , homepage system
 Route::get('/', 'HomeController@index')->name('home');
 
@@ -24,12 +45,12 @@ Route::get('/', 'HomeController@index')->name('home');
 Route::group(['prefix' => 'posts'], function() {
     Route::get('/', 'PostController@index')->name('postList');
     Route::get('/{title}', 'PostController@detail')->name('postDetail');
-    Route::post('/{title}', 'CommentController@store')->name('commentAdd')->middleware(['auth', ('rules:comment_crud')]);
+    Route::post('/{title}', 'CommentController@store')->name('commentAdd')->middleware(['auth', 'rules:comment_crud','verified']);
 });
 
 
 //Admin group functions
-Route::group(['prefix'=>'admin', 'middleware' => 'auth'], function() {
+Route::group(['prefix'=>'admin', 'middleware' => ['auth','verified']], function() {
     //Admin homepage
     Route::get('/','HomeController@adminIndex')->name('adminHomepage');
 
@@ -52,6 +73,7 @@ Route::group(['prefix'=>'admin', 'middleware' => 'auth'], function() {
         Route::get('/', 'UserController@index')->name('userList');
         Route::get('/{name}', 'UserController@editForm')->name('userEditForm');
         Route::patch('/{name}', 'UserController@edit')->name('userEdit');
+        Route::delete('/{name}', 'UserController@remove')->name('userRemove');
     });
 
     //Admin RoleController, admin Role System

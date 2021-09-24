@@ -6,6 +6,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -61,5 +62,16 @@ class UserController extends Controller
     public function editForm(string $name)
     {
         return view('/admin/users/form',['user' => User::where(['name' => $name])->first(), 'roles' => Role::all()]);
+    }
+
+    public function remove(string $name)
+    {
+        /** @var User $user */
+        User::where(['name' => $name])->firstOrFail()->delete();
+        if((Auth::user())->name === $name) {
+            Auth::logout();
+            return redirect('/');
+        }
+        return redirect('/admin/users');
     }
 }

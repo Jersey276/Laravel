@@ -32,6 +32,16 @@ class RoleController extends Controller
     public function edit($name, Request $request)
     {
         $role = Role::findOrFail($name);
+        if ($role->name != $request->name) {
+            foreach (Role::all() as $tmpRole) {
+                $parents = json_decode($tmpRole->parents);
+                if ($parents != null && array_search($role->name, $parents)) {
+                    $parents[array_search($role->name, $parents)] = $request->name;
+                    $tmpRole->parents = json_encode($parents);
+                    $tmpRole->save();
+                }
+            }
+        }
         $role->name = $request->name;
         $role->parents = $request->parents;
         $role->save();
