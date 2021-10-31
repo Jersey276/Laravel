@@ -23,7 +23,7 @@
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm">
             @if(Auth::user() && Auth::user()->rules('admin_panel'))
                 <a class="btn btn-primary float-left" data-bs-toggle="offcanvas" href="#adminOffCanvas" role="button" aria-controls="offcanvasExample">
                     Admin

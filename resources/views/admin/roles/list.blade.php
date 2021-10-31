@@ -1,8 +1,8 @@
 @extends('layouts/app')
 
 @section('content')
-    <a class="btn btn-success" href="/admin/roles/add">Nouveau roles</a>
-    @if (count($roles) == 0)
+    <a class="btn btn-success" href="/admin/roles/add">Nouveau rôle</a>
+    @if (count($roles)-1 == 0)
     <div class="alert alert-danger">
         Aucun role de base a été crée
         <form method="post" action="/admin/roles/add">
@@ -19,7 +19,7 @@
             <thead>
                 <tr>
                     <th scope="col">name</th>
-                    <th scope="col">roles parents</th>
+                    <th scope="col">rôles parents</th>
                     <th scole="col">actions</th>
                 </tr>
             </thead>
