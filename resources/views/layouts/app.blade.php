@@ -44,6 +44,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('postList')}}">{{__('Posts')}}</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('projectList')}}">{{__('Projects')}}</a>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
