@@ -13,5 +13,5 @@
     </div>
 </div>
 <h1>{{ $project->title }}</h1>
-{{ $project->text }}
+{!! $project->text !!}
 @endsection

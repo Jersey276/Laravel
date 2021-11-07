@@ -1,5 +1,9 @@
 @extends('layouts/app')
 
+@section('scripts')
+    <script src="https://cdn.tiny.cloud/1/{{env('TINYMCE_KEY')}}/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+@endsection
+
 @section('content')
 
 @isset($project)
@@ -46,6 +50,16 @@
         @else
             <textarea class="form-control" name="text" placeholder="Description du projet"></textarea>
         @endisset
+        <script>
+            tinymce.init({
+                selector: 'textarea',
+                plugins: 'advlist autolink lists link image charmap preview hr anchor pagebreak',
+                toolbar: 'h1 h2 bold italic strikethrough blockquote bullist numlist backcolor | alignleft aligncenter alignright alignjustify | link image media | removeformat help',
+                quickbars_image_toolbar: 'alignleft aligncenter alignright | rotateleft rotateright | imageoptions',
+                toolbar_mode: 'floating',
+                statusbar: false,
+            });
+        </script>
         <label for="text">Texte</label>
     </div>
     <input type="submit" class="btn btn-success" value="Poster">
