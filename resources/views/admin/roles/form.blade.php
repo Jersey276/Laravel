@@ -18,16 +18,23 @@
     @if (isset($editRole) && $editRole->name === 'user')
         <div class="alert alert-danger">le Role User ne peut avoir de parent</div>
     @else
-        @foreach ($roles as $role)
-            @if (empty($editRole) || $editRole->name !== $role->name)
-                <label for="parents[]">{{$role->name}}</label>
-                @if(isset($editRole) && (json_decode($editRole->parents) !== null && in_array($role->name, json_decode($editRole->parents))))
-                    <input class="form-check" type="checkbox" name="parents[]" value="{{$role->name}}" checked>
-                @else
-                    <input class="form-check" type="checkbox" name="parents[]" value="{{$role->name}}">
-                @endif
-            @endif
-        @endforeach
+        <h2> Rôles parents </h2>
+        <div class="row">
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
+                @foreach ($roles as $role)
+                    @if (empty($editRole) || $editRole->name !== $role->name)
+                        <div class="form-check form-switch">
+                            <label class="form-check-label" for="parents[]">{{$role->name}}</label>
+                            @if(isset($editRole) && (json_decode($editRole->parents) !== null && in_array($role->name, json_decode($editRole->parents))))
+                                <input class="form-check-input" type="checkbox" name="parents[]" value="{{$role->name}}" checked>
+                            @else
+                                <input class="form-check-input" type="checkbox" name="parents[]" value="{{$role->name}}">
+                            @endif
+                        </div>
+                    @endif
+                @endforeach
+            </div>
+        </div>
     @endif
     <input type="submit" class="btn btn-success">
 </form>

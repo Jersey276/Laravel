@@ -48,6 +48,11 @@ Route::group(['prefix' => 'posts'], function() {
     Route::post('/{title}', 'CommentController@store')->name('commentAdd')->middleware(['auth', 'rules:comment_crud','verified']);
 });
 
+//ProjectController, Project system
+Route::group(['prefix' => 'projects'], function() {
+    Route::get('/', 'ProjectController@index')->name('projectList');
+    Route::get('/{title}', 'ProjectController@detail')->name('projectDetail');
+});
 
 //Admin group functions
 Route::group(['prefix'=>'admin', 'middleware' => ['auth','verified']], function() {
@@ -62,6 +67,16 @@ Route::group(['prefix'=>'admin', 'middleware' => ['auth','verified']], function(
         Route::get('/{id}/edit', 'PostController@editForm')->name('adminPostEditform');
         Route::patch('/{id}/edit', 'PostController@edit')->name('adminPostEdit');
         Route::delete('/{id}', 'PostController@remove')->name('adminPostDelete');
+    });
+
+    //AdminProjectController, admin Project system
+    Route::group(['prefix'=>'projects','middleware'=>'rules:project_crud'], function() {
+        Route::get('/', 'ProjectController@adminIndex')->name('adminProjectList');
+        Route::get('/add','ProjectController@createForm')->name('adminProjectAddForm');
+        Route::post('/add','ProjectController@create')->name('adminProjectAdd');
+        Route::get('/{id}', 'ProjectController@editForm')->name('adminProjectEditForm');
+        Route::put('/{id}', 'ProjectController@edit')->name('adminProjectEdit');
+        Route::delete('/{id}', 'ProjectController@remove')->name('adminProjectDelete');
     });
 
     //Admin CommentController, admin Comment system

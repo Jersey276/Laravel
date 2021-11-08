@@ -12,6 +12,7 @@
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
     <!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>-->
+    @yield('scripts')
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -20,10 +21,11 @@
     <!-- Styles -->
     <!--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">-->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    @yield('styles')
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm">
             @if(Auth::user() && Auth::user()->rules('admin_panel'))
                 <a class="btn btn-primary float-left" data-bs-toggle="offcanvas" href="#adminOffCanvas" role="button" aria-controls="offcanvasExample">
                     Admin
@@ -43,6 +45,9 @@
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('postList')}}">{{__('Posts')}}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('projectList')}}">{{__('Projects')}}</a>
                         </li>
                     </ul>
 
@@ -94,111 +99,7 @@
         </main>
     </div>
     @if(Auth::user() && Auth::user()->rules('admin_panel'))
-        <div class="offcanvas offcanvas-start" id="adminOffCanvas">
-            <div class="offcanvas-header">
-                <h2>Admin</h2>
-            </div>
-            <div class="offcanvas-body w-100 h-100 px-0">
-                <div class="accordion px-0" id="admin-offcanvas-accordion">
-                    @if (Auth::user()->rules('user_admin'))
-                        <div class="accordion-item">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#user-collapse" aria-expanded="false" aria-controls="user-collapse"> 
-                                Utilisateur
-                            </button>
-                            <ul id="user-collapse" class="accordion-collapse collapse list-group-flush mb-0" data-bs-parent="#admin-offcanvas-accordion">
-                                <li class="list-group-item">
-                                    <a class="link-dark" href="/admin/users">Lister les utilisateurs</a>
-                                </li>
-                            </ul>
-                        </div>
-                    @endif
-                    @if (Auth::user()->rules('post_crud'))
-                        <div class="accordion-item">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#post-collapse"  aria-expanded="false" aria-controls="post-collapse"> 
-                                Articles
-                            </button>
-                            <ul id="post-collapse" class="accordion-collapse collapse list-group-flush mb-0"  data-bs-parent="#admin-offcanvas-accordion">
-                                <li class="list-group-item">
-                                    <a class="link-dark" href="/admin/posts">Lister les articles</a>
-                                </li>
-                                <li class="list-group-item">
-                                    <a class="link-dark" href="/admin/posts/add">Créer un article</a>
-                                </li>
-                            </ul>
-                        </div>
-                    @endif
-                    @if (Auth::user()->rules('project_crud'))
-                    <div class="accordion-item">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#project-collapse"  aria-expanded="false" aria-controls="project-collapse">
-                            Projets
-                        </button>
-                        <ul id="project-collapse" class="accordion-collapse collapse list-group-flush mb-0"  data-bs-parent="#admin-offcanvas-accordion">
-                            <li class="list-group-item">
-                                <a class="link-dark" href="/admin/projects">Lister les projets</a>
-                            </li>
-                            <li class="list-group-item">
-                                <a class="link-dark" href="/admin/projects/add">Créer un projet</a>
-                            </li>
-                        </ul>
-                    </div>
-                    @endif
-                    @if(Auth::user()->rules('cv_crud'))
-                    <div class="accordion-item">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cv-collapse"  aria-expanded="false" aria-controls="cv-collapse">
-                            CV
-                        </button>
-                        <ul id="cv-collapse" class="accordion-collapse collapse list-group-flush mb-0"  data-bs-parent="#admin-offcanvas-accordion">
-                            <li class="list-group-item">
-                                <a class="link-dark" href="/admin/cv">Gérer les éléments du cv</a>
-                            </li>
-                            <li class="list-group-item">
-                                <a class="link-dark" href="/admin/cv/exp">Gérer les expériences</a>
-                            </li>
-                            <li class="list-group-item">
-                                <a class="link-dark" href="/admin/cv/knowledge">Gérer les compétences</a>
-                            </li>
-                            <li class="list-group-item">
-                                <a class="link-dark" href="/admin/cv/courses">Gérer les formations</a>
-                            </li>
-                            <li class="list-group-item">
-                                <a class="link-dark" href="/admin/cv/languages">Gérer les langues</a>
-                            </li>
-                        </ul>
-                    </div>
-                    @endif
-                    <div class="accordion-item">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#admin-collapse"  aria-expanded="false" aria-controls="admin-collapse"> 
-                            Options d'administrations
-                        </button>
-                        <ul id="admin-collapse" class="accordion-collapse collapse list-group-flush mb-0"  data-bs-parent="#admin-offcanvas-accordion">
-                            @if(Auth::user()->rules('moderation'))
-                            <li class="list-group-item">
-                                <a class="link-dark" href="/admin/log">gérer les journaux</a>
-                            </li>
-                            @endif
-                            @if(Auth::user()->rules('moderation'))
-                            <li class="list-group-item">
-                                <a class="link-dark" href="/admin/users/banlist">Lister les utilisateurs bannis</a>
-                            </li>
-                            @endif
-                            @if(Auth::user()->rules('roles_crud'))
-                            <li class="list-group-item">
-                                <a class="link-dark" href="/admin/roles">Lister les roles</a>
-                            </li>
-                            <li class="list-group-item">
-                                <a class="link-dark" href="/admin/roles/add">Ajouter un role</a>
-                            </li>
-                            @endif
-                            @if(Auth::user()->rules('rules_admin'))
-                            <li class="list-group-item">
-                                <a class="link-dark" href="/admin/rules">Lister les règles</a>
-                            </li>
-                            @endif
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <x:panel.base/>
     @endif
 </body>
 </html>
