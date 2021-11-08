@@ -6,9 +6,9 @@ A laravel website for present myself. This website can be used for a people, a g
 
 This website can do :
 
-- blog system, with post and command
-- project display, and editor
-- authentification system
+-   blog system, with post and command
+-   project display, and editor
+-   authentification system
 
 ## Authentification / Authorization system
 
