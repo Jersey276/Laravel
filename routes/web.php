@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -65,7 +63,7 @@ Route::group(['prefix'=>'admin', 'middleware' => ['auth','verified']], function(
         Route::get('/add', 'PostController@createForm')->name('adminPostAddForm');
         Route::post('/add', 'PostController@create')->name('adminPostAdd');
         Route::get('/{id}/edit', 'PostController@editForm')->name('adminPostEditform');
-        Route::patch('/{id}/edit', 'PostController@edit')->name('adminPostEdit');
+        Route::put('/{id}/edit', 'PostController@edit')->name('adminPostEdit');
         Route::delete('/{id}', 'PostController@remove')->name('adminPostDelete');
     });
 
@@ -87,7 +85,7 @@ Route::group(['prefix'=>'admin', 'middleware' => ['auth','verified']], function(
     Route::group(['prefix'=>'users', 'middleware'=>'rules:user_admin'], function() {
         Route::get('/', 'UserController@index')->name('userList');
         Route::get('/{name}', 'UserController@editForm')->name('userEditForm');
-        Route::patch('/{name}', 'UserController@edit')->name('userEdit');
+        Route::put('/{name}', 'UserController@edit')->name('userEdit');
         Route::delete('/{name}', 'UserController@remove')->name('userRemove');
     });
 

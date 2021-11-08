@@ -3,10 +3,10 @@
 <div class="card mb-3">
     <div class="card-header">
         <h1 class="card-title">{{ $post->title }}</h1>
-        <p class="card-subtitle">{{ $post->slug }}</p>
+        <i class="card-subtitle">{{ $post->slug }}</i>
     </div>
     <div class="card-body">
-        <p class="card-text">{!! nl2br(e($post->text)) !!}</p>
+        <p class="card-text">{!! $post->text !!}</p>
     </div>
     <div class="card-footer">
         {{ $post->author->name }} le {{ $post->created_at }}
@@ -26,7 +26,7 @@
                 <h5>{{ $comment->author->name }}</h5>
                 <small>{{ $comment->created_at }}</small>
             </div>
-            <div>{!! nl2br(e($comment->comment)) !!}</div>
+            <div>{!! nl2br($comment->comment) !!}</div>
         </div>
     @endforeach
 </div>
