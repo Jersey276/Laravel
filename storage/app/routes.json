@@ -1,0 +1,109 @@
+{
+    "user" : {
+        "name" : "Utilisateurs",
+        "rules" : "user_admin",
+        "links" : {
+            "user_lists" : {
+                "name" : "Lister les utilisateurs",
+                "links" : "/admin/users"
+            }
+        }
+    },
+    "posts" : {
+        "name" : "Articles",
+        "rules" : "post_crud",
+        "links" : {
+            "posts_lists" : {
+                "name" : "Lister les articles",
+                "links" : "/admin/posts"
+            },
+            "posts_add" : {
+                "name" : "Créer un articles",
+                "links" : "/admin/posts/add"
+            }
+        }
+    },
+    "projects" : {
+        "name" : "Projets",
+        "rules": "project_crud",
+        "links": {
+            "project_lists" : {
+                "name" : "Lister les projets",
+                "links" : "/admin/projects"
+            },
+            "project_add" : {
+                "name" : "Créer un projet",
+                "links" : "/admin/projects/add"
+            },
+            "project_technology_lists" : {
+                "name" : "Lister les technologies",
+                "links" : "/admin/projects/technologies"
+            },
+            "project_technology_add" : {
+                "name" : "Ajouter une technologie",
+                "links" : "/admin/projects/technologies/add"
+            }
+        }
+    },
+    "cv" : {
+        "name" : "CV",
+        "rules": "cv_crud",
+        "links": {
+            "cv_infos" : {
+                "name" : "Gérer les éléments du cv",
+                "links" : "/admin/cv"
+            },
+            "cv_exp": {
+                "name" : "Gérer les expériences",
+                "links" : "/admin/cv/exp"
+            },
+            "cv_knowledge": {
+                "name" : "Gérer les compétences",
+                "links" : "/admin/cv/knowledge"
+            },
+            "cv_courses": {
+                "name" : "Gérer les formations",
+                "links" : "/admin/cv/courses"
+            },
+            "cv_lang": {
+                "name" : "Gérer les languages",
+                "links" : "/admin/cv/languages"
+            }
+        }
+    },
+    "admin": {
+        "name" : "Options d'administrations",
+        "links": {
+            "admin_log": {
+                "name" : "Consulter les journeaux",
+                "rules" : "moderation",
+                "links" : "/admin/log"
+            },
+            "admin_banned_users": {
+                "name": "Gérer les utilisateurs bannis",
+                "rules" : "moderation",
+                "links" : "/admin/users/banned" 
+            },
+            "contact": {
+                "name" : "Consulter les réponses du formulaire de contacts",
+                "rules" : "contact",
+                "links" : "/admin/contacts"
+            },
+            "admin_roles_lists": {
+                "name" : "Gérer les roles",
+                "rules" : "roles_crud",
+                "links" : "/admin/roles"
+            },
+            "admin_roles_add": {
+                "name" : "Ajouter un role",
+                "rules" : "roles_crud",
+                "links" : "/admin/roles/add"
+            },
+            "admin_rules_lists": {
+                "name" : "Gérer les règles",
+                "rules" : "rules_admin",
+                "links" : "/admin/rules" 
+            }
+        }
+    }
+}
