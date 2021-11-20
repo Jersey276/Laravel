@@ -18,7 +18,6 @@ class RuleManager {
             $rule->roles()->attach(Role::find('admin'));
         }
         // check user direct role
-        /** @var User $user */
         $user_role = $user->role;
         if ($rule->roles->contains($user_role)) {
             return true;
@@ -31,5 +30,27 @@ class RuleManager {
             }
         }
         return false;
+    }
+
+    public static function getUsersAuthorized(string $name) : ?array
+    {
+        $rule = Rule::find($name);
+        $roles = Role::all();
+
+       $concernedRoles = collect([]);
+        foreach ($roles as $role) {
+            if ($role->rules->contains($rule)) {
+                $concernedRoles->add($role);
+            }
+        }
+        if ($concernedRoles->count() == 0) {
+            return null;
+        }
+        $authorizedUsers = [];
+        foreach ($concernedRoles->all() as $role) {
+        $authorizedUsers =  array_merge($role->users->all(),$authorizedUsers);
+        }
+
+        return $authorizedUsers;
     }
 }
