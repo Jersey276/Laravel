@@ -2,10 +2,12 @@
 
 namespace App\View\Components\panel;
 
+use Illuminate\Support\Facades\File;
 use Illuminate\View\Component;
 
 class base extends Component
 {
+    public $panelRoutes;
 
     /**
      * Create a new component instance.
@@ -14,7 +16,7 @@ class base extends Component
      */
     public function __construct()
     {
-        //
+        $this->panelRoutes = json_decode(File::get(storage_path() . "/app/routes.json"));
     }
 
     /**

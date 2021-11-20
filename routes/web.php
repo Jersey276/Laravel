@@ -39,6 +39,10 @@ Route::group(['prefix' => 'reset-password', 'middleware' => 'guest'], function()
 // HomeController , homepage system
 Route::get('/', 'HomeController@index')->name('home');
 
+// ContactController, contact form system
+Route::get('contact', 'ContactController@sendform')->name('contactForm');
+Route::post('contact', 'ContactController@send')->name('contact');
+
 //PostController, Post system
 Route::group(['prefix' => 'posts'], function() {
     Route::get('/', 'PostController@index')->name('postList');
@@ -99,9 +103,15 @@ Route::group(['prefix'=>'admin', 'middleware' => ['auth','verified']], function(
         Route::delete('/{name}','RoleController@remove')->name('roleRemove');
     });
 
+    //Admin RuleController, rules System
     Route::group(['prefix'=>'rules', 'middleware' => 'rules:rules_admin'], function() {
         Route::get('/','RuleController@index')->name('ruleList');
         Route::get('/{name}','RuleController@editForm')->name('ruleEditForm');
         Route::patch('/{name}','RuleController@edit')->name('ruleEditForm');
+    });
+
+    //Admin ContactController, admin Contact form System
+    Route::group(['prefix'=>'contacts', 'middleware' => 'rules:contact'], function() {
+        Route::get('/', 'ContactController@index')->name('contactList');
     });
 });
