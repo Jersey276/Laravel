@@ -1,15 +1,13 @@
 @import url('bootstrap');
 
-.text-linkedin{
-    color: #0e76a8;
+.text-linkedin {
+  color: #0e76a8;
 }
 
-.text-github
-{
-    color: #6e5494;
+.text-github {
+  color: #6e5494;
 }
 
-.text-contact
-{
-    color: #ec5e1a;
+.text-contact {
+  color: #ec5e1a;
 }
