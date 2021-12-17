@@ -21,6 +21,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
+        'avatar',
+        'biography'
     ];
 
     /**
@@ -55,6 +57,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function role()
     {
         return $this->belongsTo(Role::class, 'role_name');
+    }
+
+    public function displayLink()
+    {
+        return '/users/'. $this->name;
     }
 
     public function adminEditLink()

@@ -56,6 +56,16 @@ Route::group(['prefix' => 'projects'], function() {
     Route::get('/{title}', 'ProjectController@detail')->name('projectDetail');
 });
 
+//UserController, User Moderation system
+Route::group(['prefix' => 'users'], function() {
+    Route::group(['middleware' => 'auth'], function () {
+        Route::get('/edit', 'UserController@editForm')->name('userEditForm');
+        Route::put('/edit', 'UserController@edit')->name('userEdit');
+        Route::put('/avatar','UserController@changeAvatar')->name('userAvatarChange');
+    });
+    Route::get('/{name}', 'UserController@detail')->name('userDetail');
+});
+
 //Admin group functions
 Route::group(['prefix'=>'admin', 'middleware' => ['auth','verified']], function() {
     //Admin homepage
@@ -88,8 +98,9 @@ Route::group(['prefix'=>'admin', 'middleware' => ['auth','verified']], function(
     //Admin UserController, admin User system
     Route::group(['prefix'=>'users', 'middleware'=>'rules:user_admin'], function() {
         Route::get('/', 'UserController@index')->name('userList');
-        Route::get('/{name}', 'UserController@editForm')->name('userEditForm');
-        Route::put('/{name}', 'UserController@edit')->name('userEdit');
+        Route::get('/banned','UserController@bannedList')->name('userBanList');
+        Route::get('/{name}', 'UserController@adminEditForm')->name('userEditForm');
+        Route::put('/{name}', 'UserController@adminEdit')->name('userEdit');
         Route::delete('/{name}', 'UserController@remove')->name('userRemove');
     });
 

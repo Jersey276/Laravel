@@ -70,7 +70,13 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
-        $role = Role::find('user');
+        $role = Role::where(['default' => true])->first();
+        if (!$role instanceof Role) {
+            Role::create([
+                'title' => 'user',
+                'default' => true
+            ]);
+        }
         $user->role()->associate($role);
         $user->save();
         return $user;

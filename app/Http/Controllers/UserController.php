@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Support\File;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -35,9 +36,51 @@ class UserController extends Controller
         return view('admin/users/list', ['users' => User::all()]);
     }
 
-    public function detail()
+    /**
+     * Display all public information of an user
+     */
+    public function detail(string $name)
     {
+        return view('/users/detail', ['user' => User::where(['name' => $name])->first()]);
+    }
 
+    /**
+     * 
+     */
+    public function edit(Request $request)
+    {
+        /** @var User $user */
+        $user = User::find(Auth::user()->id);
+        $isEmailUpdated = false;
+        if ($user->email != $request->email) {
+            $user->email_verified_at == null;
+            $isEmailUpdated = true;
+        }
+        $user->email = $request->email;
+        $user->biography = $request->biography;
+        $user->save();
+        if ($isEmailUpdated) {
+            $user->sendEmailVerificationNotification();
+        }
+        return redirect('users/'.$user->name);
+    }
+
+    public function changeAvatar(Request $request)
+    {
+        /** @var User $user */
+        $user = Auth::user();
+        if ($request->hasFile('avatar')) {
+            $avatar = $request->file('avatar');
+            $avatar->storeAs(
+                'public',
+                'avatar/'.$user->name . '.' . $avatar->getClientOriginalExtension(),
+            );
+        } else {
+            die('error');
+        }
+        $user->avatar = $user->name . '.' . $avatar->getClientOriginalExtension();
+        $user->save();
+        return redirect('users/edit');
     }
 
     /**
@@ -46,7 +89,7 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function edit(string $name, Request $request)
+    public function adminEdit(string $name, Request $request)
     {
         /** @var User $user */
         $user = User::where(['name' => $name])->first();
@@ -59,7 +102,12 @@ class UserController extends Controller
         return redirect('/admin/users');
     }
 
-    public function editForm(string $name)
+    public function editForm()
+    {
+        return view('/users/form',['user' => Auth::user()]);
+    }
+
+    public function adminEditForm(string $name)
     {
         return view('/admin/users/form',['user' => User::where(['name' => $name])->first(), 'roles' => Role::all()]);
     }
