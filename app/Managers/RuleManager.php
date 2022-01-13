@@ -15,7 +15,7 @@ class RuleManager {
             $rule = Rule::Create(
                 ['name' => $name]
             );
-            $rule->roles()->attach(Role::find('admin'));
+            $rule->roles()->attach(Role::firstWhere('isMaster', true));
         }
         // check user direct role
         $user_role = $user->role;

@@ -6,9 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Models\Role;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+
+use IlluminateHttpRequest;
+use IlluminateAuthEventsRegistered;
+
+use function PHPSTORM_META\type;
 
 class RegisterController extends Controller
 {
@@ -70,15 +76,25 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
-        $role = Role::where(['default' => true])->first();
-        if (!$role instanceof Role) {
-            Role::create([
-                'title' => 'user',
-                'default' => true
+        try {
+            $role = Role::where('default', true)->firstOrFail();
+        } catch (ModelNotFoundException $e) {
+            $role = Role::create([
+                'name' => 'user',
+                'default' => true,
+                'isMaster' => false
             ]);
+        } finally {
+            if (User::all()->count() == 0) {
+                $role = Role::create([
+                    'name' => 'admin',
+                    'default' => false,
+                    'isMaster' => true
+                ]);
+            }
+            $user->role()->associate($role);
+            $user->save();
+            return $user;
         }
-        $user->role()->associate($role);
-        $user->save();
-        return $user;
     }
 }
