@@ -80,6 +80,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return '/admin/users/banned/'. $this->id;
     }
 
+    public function adminUnbanLink()
+    {
+        return '/admin/users/banned/'. $this->id.'/unban';
+    }
+
     public function rules(String $name) : bool
     {
         return RuleManager::checkRule($name, $this);

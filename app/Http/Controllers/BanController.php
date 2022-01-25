@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Managers\UserManager;
-use App\Models\ban;
+use App\Models\Ban;
 use App\Models\BanType;
 use App\Models\User;
 use DateInterval;
@@ -34,14 +34,28 @@ class BanController extends Controller
     {
         return view('admin/ban/form',['user' => $id, 'banType' => Bantype::all(), 'judge' => Auth::user()]);
     }
-
-    public function banDelete(Ban $ban)
+    
+    public function unbanUser(User $id)
     {
+        $bans = $id->bans;
+        foreach($bans as $ban) {
+            /** @var Ban $ban */
+            $ban->isActive = false;
+            $ban->save();
+        }
+        return redirect()->back();
+    }
+
+    public function banDelete(int $idBan)
+    {
+
+        /** @var Ban $ban */
+        $ban = Ban::find($idBan);
         $ban->delete();
         return back();
     }
 
-    public function unban(User $id, Ban $ban = null)
+    public function unban(User $id, Ban $idBan = null)
     {
         if(isset($ban)) {
             $ban->isActive = false;

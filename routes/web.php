@@ -105,8 +105,8 @@ Route::group(['prefix'=>'admin', 'middleware' => ['auth','verified']], function(
             Route::get('/banned','BanController@bannedList')->name('bannedUserList');
             Route::get('/banned/{id}','BanController@userBanList')->name('userBanList');
             Route::put('/banned/{id}/unban','BanController@unbanUser')->name('userUnbanAll');
-            Route::put('/banned/{id}/unban/{ban}','BanController@unban')->name('userUnban')->whereNumber("ban");
-            Route::delete('/banned/{id}/unban/{ban}','BanController@banDelete')->name('userBanDelete')->whereNumber("ban");
+            Route::put('/banned/{id}/unban/{idBan}','BanController@unban')->name('userUnban')->whereNumber("idBan");
+            Route::delete('/banned/{id}/unban/{idBan}','BanController@banDelete')->name('userBanDelete')->whereNumber("idBan");
             Route::get('/ban/types','BanController@banTypeList')->name('userBanTypeList');
             Route::get('/ban/types/add','BanController@banTypeForm')->name('userBanTypeAddForm');
             Route::post('/ban/types/add','BanController@banTypeSend')->name('userBanTypeAdd');
