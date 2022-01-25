@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Date;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -69,8 +70,28 @@ class User extends Authenticatable implements MustVerifyEmail
         return '/admin/users/' . $this->name;
     }
 
+    public function adminBanLink()
+    {
+        return '/admin/users/ban/'. $this->id;
+    }
+
+    public function adminBannedLink()
+    {
+        return '/admin/users/banned/'. $this->id;
+    }
+
     public function rules(String $name) : bool
     {
         return RuleManager::checkRule($name, $this);
+    }
+
+    public function bans()
+    {
+        return $this->hasMany(Ban::class, 'user_ban');
+    }
+
+    public function judge()
+    {
+        return $this->hasMany(Ban::class, 'user_judge');
     }
 }

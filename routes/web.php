@@ -96,12 +96,32 @@ Route::group(['prefix'=>'admin', 'middleware' => ['auth','verified']], function(
     Route::delete('/posts/{id}/comments/{commentId}','CommentController@remove')->name('adminCommentList')->middleware('rules:comment_manage');
 
     //Admin UserController, admin User system
-    Route::group(['prefix'=>'users', 'middleware'=>'rules:user_admin'], function() {
-        Route::get('/', 'UserController@index')->name('userList');
-        Route::get('/banned','UserController@bannedList')->name('userBanList');
-        Route::get('/{name}', 'UserController@adminEditForm')->name('userEditForm');
-        Route::put('/{name}', 'UserController@adminEdit')->name('userEdit');
-        Route::delete('/{name}', 'UserController@remove')->name('userRemove');
+    Route::group(['prefix'=>'users'], function() {
+        Route::group(['middleware'=>['rules:user_list']], function() {
+            Route::get('/', 'UserController@index')->name('userList');
+        });
+
+        Route::group(['middleware'=>'rules:moderation'], function() {
+            Route::get('/banned','BanController@bannedList')->name('bannedUserList');
+            Route::get('/banned/{id}','BanController@userBanList')->name('userBanList');
+            Route::put('/banned/{id}/unban','BanController@unbanUser')->name('userUnbanAll');
+            Route::put('/banned/{id}/unban/{ban}','BanController@unban')->name('userUnban')->whereNumber("ban");
+            Route::delete('/banned/{id}/unban/{ban}','BanController@banDelete')->name('userBanDelete')->whereNumber("ban");
+            Route::get('/ban/types','BanController@banTypeList')->name('userBanTypeList');
+            Route::get('/ban/types/add','BanController@banTypeForm')->name('userBanTypeAddForm');
+            Route::post('/ban/types/add','BanController@banTypeSend')->name('userBanTypeAdd');
+            Route::get('/ban/types/{id}','BanController@banTypeForm')->name('userBanTypeEditForm');
+            Route::put('/ban/types/{id}','BanController@banTypeSend')->name('userBanTypeEdit');
+            Route::delete('/ban/types/{id}','BanController@banTypeDelete')->name('userBanTypeDelete');
+            Route::get('/ban/{id}','BanController@banForm')->name('userBanForm');
+            Route::post('/ban/{id}','BanController@ban')->name('userBan');
+        });
+
+        Route::group(['middleware'=>'rules:user_admin'], function() {
+            Route::get('/{name}', 'UserController@adminEditForm')->name('userEditForm');
+            Route::put('/{name}', 'UserController@adminEdit')->name('userEdit');
+            Route::delete('/{name}', 'UserController@remove')->name('userRemove');
+        });
     });
 
     //Admin RoleController, admin Role System
