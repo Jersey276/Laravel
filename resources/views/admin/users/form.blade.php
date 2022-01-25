@@ -3,7 +3,7 @@
 @section('content')
 <form method="post">
     @csrf
-    @method('patch')
+    @method('put')
     <label for="name">nom d'utilisateur</label>
     <input class="form-control" type="text" name="name" value="{{$user->name}}">
     <label for="email">adresse mail</label>
