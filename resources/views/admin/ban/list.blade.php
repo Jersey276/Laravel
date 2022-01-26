@@ -20,7 +20,7 @@
                 </div>
                 <div class="accordion-footer d-flex flex-row py-3 px-3 border-top">
                     @if ($ban->isActive)
-                        <form method="post" action="{{ $ban->unbanLink(true) }}">
+                        <form method="post" action="{{ $ban->unbanLink() }}">
                             @csrf
                             @method('put')
                             <button type="submit" class="link-warning border-0 bg-transparent" value="Supprimer"  data-bs-toggle="tooltip" data-bs-placement="top"  title="{{__('Désactiver le ban')}}">
@@ -40,7 +40,7 @@
                             </svg>
                         </button>
                     @endif
-                    <form method="post" action="{{ $ban->unbanLink(true) }}">
+                    <form method="post" action="{{ $ban->unbanLink() }}">
                         @csrf
                         @method('delete')
                         <button type="submit" class="link-danger border-0 bg-transparent" value="Supprimer"  data-bs-toggle="tooltip" data-bs-placement="top"  title="{{__('Supprimer le ban')}}">

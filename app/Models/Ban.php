@@ -19,12 +19,9 @@ class Ban extends Model
 
     public $timestamps = false;
 
-    public function unbanLink(bool $unique = false) : string
+    public function unbanLink() : string
     {
-        if ($unique) {
-            return $this->user->id .'/unban/'. $this->id;
-        }
-        return $this->user->id.'/unban';
+        return '/admin/users/banned/'.$this->user->id .'/unban/'. $this->id;
     }
 
     public function bantype() {
