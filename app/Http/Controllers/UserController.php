@@ -96,14 +96,22 @@ class UserController extends Controller
         /** @var User $user */
         $user = User::where(['name' => $name])->first();
         $user->name = $request->name;
+        $isEmailUpdated = false;
+        if ($user->email != $request->email) {
+            $user->email_verified_at == null;
+            $isEmailUpdated = true;
+        }
         $user->email = $request->email;
         $user->role()->dissociate();
         $user->role()->associate(Role::findOrFail($request->role));
         if($user->save()) {
-            $this->successFlash($request, 'L\'utilisateur'. $user->name.' a été modifié avec succès');
+            $this->successFlash($request, 'L\'utilisateur '. $user->name.' a été modifié avec succès');
+            if ($isEmailUpdated) {
+                $user->sendEmailVerificationNotification();
+            }
             return redirect('/admin/users');
         }
-        $this->errorFlash($request, 'L\'utilisateur'.$user->name.'n\'a pu être modifié avec succès');
+        $this->errorFlash($request, 'L\'utilisateur '.$user->name.'n\'a pu être modifié avec succès');
         return back();
     }
 
