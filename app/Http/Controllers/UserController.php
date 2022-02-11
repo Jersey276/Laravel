@@ -76,10 +76,12 @@ class UserController extends Controller
                 'avatar/'.$user->name . '.' . $avatar->getClientOriginalExtension(),
             );
         } else {
-            die('error');
+            $this->errorFlash($request, "Aucune image n'a été trouvé");
+            return back();
         }
         $user->avatar = $user->name . '.' . $avatar->getClientOriginalExtension();
         $user->save();
+        $this->successFlash($request, "L'avatar a été uploadé avec succes");
         return redirect('users/edit');
     }
 
@@ -97,9 +99,12 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->role()->dissociate();
         $user->role()->associate(Role::findOrFail($request->role));
-        $user->save();
-
-        return redirect('/admin/users');
+        if($user->save()) {
+            $this->successFlash($request, 'L\'utilisateur'. $user->name.' a été modifié avec succès');
+            return redirect('/admin/users');
+        }
+        $this->errorFlash($request, 'L\'utilisateur'.$user->name.'n\'a pu être modifié avec succès');
+        return back();
     }
 
     public function editForm()
