@@ -34,19 +34,6 @@ class BanController extends Controller
     {
         return view('admin/ban/form',['user' => $id, 'banType' => Bantype::all(), 'judge' => Auth::user()]);
     }
-    
-    public function unbanUser(Request $request, User $id)
-    {
-        $bans = $id->bans;
-        foreach($bans as $ban) {
-            /** @var Ban $ban */
-            $ban->isActive = false;
-            $ban->save();
-        }
-        $this->successFlash($request, 'Les bans de l\'utilisateur '.$id->name.' ont été supprimé avec succes');
-
-        return redirect()->back();
-    }
 
     public function banDelete(Request $request, User $id, Ban $ban)
     {
@@ -55,19 +42,21 @@ class BanController extends Controller
         return back();
     }
 
-    public function unban(User $id, Ban $ban = null)
+    public function unban(Request $request, User $id, Ban $ban = null)
     {
-        if(isset($idBan)) {
+        if(isset($ban)) {
             $ban->isActive = false;
             $ban->save();
+            $this->successFlash($request, 'Le ban de l\'utilisateur'. $id->name.' du '. $ban->startedAt->format("D F Y à H:i:s") .'est désactivé');
         } else {
             $bans = Ban::where(['user' => $id]);
             foreach ($bans as $ban) {
                 $ban->isActive = false;
                 $ban->save();
+                $this->successFlash($request, 'Les bans de l\'utilisateur '.$id->name.' ont été supprimé avec succes');
             }
         }
-        return back();
+        return redirect()->back();
     }
 
     public function ban(Request $request)
