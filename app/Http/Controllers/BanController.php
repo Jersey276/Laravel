@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\Ban as MailBan;
+use App\Mail\GeneralUnban as MailGeneralUnban;
+use App\Mail\Unban as MailUnban;
 use App\Managers\UserManager;
 use App\Models\Ban;
 use App\Models\BanType;
@@ -11,6 +14,7 @@ use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\Mail;
 
 class BanController extends Controller
 {
@@ -39,6 +43,7 @@ class BanController extends Controller
     public function banDelete(Request $request, User $id, Ban $ban)
     {
         $this->successFlash($request, 'Le ban de l\'utilisateur '.$id->name.' du '. date_format(new Datetime($ban->startedAt),"d F Y à H:i:s").' à été supprimé avec succes');
+        Mail::to($id)->send(new MailUnban($ban,true));
         $ban->delete();
         return back();
     }
@@ -48,14 +53,16 @@ class BanController extends Controller
         if(isset($ban)) {
             $ban->isActive = false;
             $ban->save();
+            Mail::to($id)->send(new MailUnban($ban,false));
             $this->successFlash($request, 'Le ban de l\'utilisateur '. $id->name.' du '. date_format(new Datetime($ban->startedAt), "d F Y à H:i:s") .' est désactivé');
         } else {
-            $bans = Ban::where(['user' => $id]);
+            $bans = $id->bans;
             foreach ($bans as $ban) {
                 $ban->isActive = false;
                 $ban->save();
-                $this->successFlash($request, 'Les bans de l\'utilisateur '.$id->name.' ont été supprimé avec succes');
             }
+            $this->successFlash($request, 'Les bans de l\'utilisateur '.$id->name.' ont été supprimé avec succes');
+            Mail::to($id)->send(new MailGeneralUnban($id));
         }
         return redirect()->back();
     }
@@ -72,8 +79,8 @@ class BanController extends Controller
             $ban->endedAt = date_add(Date::now(), DateInterval::createFromDateString($banType->duration));
         }
         $ban->judge()->associate(Auth::user());
-        $mail = 
         $ban->save();
+        Mail::to(User::where(['name' => $request->user])->first())->send(new MailBan($ban));
         return redirect('admin/users/banned');
     }
 

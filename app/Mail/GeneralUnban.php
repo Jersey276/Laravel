@@ -2,26 +2,26 @@
 
 namespace App\Mail;
 
+use App\Models\User;
 use Illuminate\Bus\Queueable;
-use App\Models\Ban as ModelBan;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Auth;
 
-class Ban extends Mailable
+class GeneralUnban extends Mailable
 {
     use Queueable, SerializesModels;
 
-    private ModelBan $ban;
-
+    private User $user;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(ModelBan $ban)
+    public function __construct(User $user)
     {
-        $this->ban = $ban;
+        $this->user = $user;
     }
 
     /**
@@ -31,6 +31,6 @@ class Ban extends Mailable
      */
     public function build()
     {
-        return $this->view('mail.ban')->subject('Vous avez été banni')->with(['isBanMail' => false, 'ban' => $this->ban]);
+        return $this->view('mail.ban')->subject('Vous avez été débannis')->with(['judge' => Auth::user() ,'isBanMail' => false, 'bans' => $this->user->bans]);
     }
 }
