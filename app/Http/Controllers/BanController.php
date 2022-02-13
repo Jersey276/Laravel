@@ -7,6 +7,7 @@ use App\Models\Ban;
 use App\Models\BanType;
 use App\Models\User;
 use DateInterval;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
@@ -37,8 +38,8 @@ class BanController extends Controller
 
     public function banDelete(Request $request, User $id, Ban $ban)
     {
+        $this->successFlash($request, 'Le ban de l\'utilisateur '.$id->name.' du '. date_format(new Datetime($ban->startedAt),"d F Y à H:i:s").' à été supprimé avec succes');
         $ban->delete();
-        $this->successFlash($request, 'Le ban n°'.$ban->id.' de l\'utilisateur '.$id->name.' à été supprimé avec succes');
         return back();
     }
 
@@ -47,7 +48,7 @@ class BanController extends Controller
         if(isset($ban)) {
             $ban->isActive = false;
             $ban->save();
-            $this->successFlash($request, 'Le ban de l\'utilisateur'. $id->name.' du '. $ban->startedAt->format("D F Y à H:i:s") .'est désactivé');
+            $this->successFlash($request, 'Le ban de l\'utilisateur '. $id->name.' du '. date_format(new Datetime($ban->startedAt), "d F Y à H:i:s") .' est désactivé');
         } else {
             $bans = Ban::where(['user' => $id]);
             foreach ($bans as $ban) {
@@ -71,6 +72,7 @@ class BanController extends Controller
             $ban->endedAt = date_add(Date::now(), DateInterval::createFromDateString($banType->duration));
         }
         $ban->judge()->associate(Auth::user());
+        $mail = 
         $ban->save();
         return redirect('admin/users/banned');
     }
