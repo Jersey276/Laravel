@@ -10,13 +10,13 @@
     <thead>
         <th scope="col">#</th>
         <th scope="col">pseudo</th>
-        <th scope="col">email</th>
-        <th scope="col">role</th>
+        <th scope="col">ban actifs</th>
+        <th scope="col">nb total ban</th>
         <th scpre="col">action</th>
     </thead>
     <tbody>
     @foreach($users as $user)
-        @include('admin.users.card')
+        @include('admin.ban.banned.card')
     @endforeach
     </tbody>
 </table>

@@ -18,7 +18,7 @@
             <label class="form-label">Titre</label>
         </div>
         <div class="form-floating mb-3">
-            <input class="form-control" type="text" name="slug" value="{{ $post->slug }}" placeholder="slug">
+            <input class="form-control" type="text" name="slug" value="{{ isset($post) ? $post->slug : null}}" placeholder="slug">
             <label class="form-label">Description</label>
         </div>
         <x:tiny-mce name="text" :text="isset($post) ? $post->text : null" />

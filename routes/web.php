@@ -56,6 +56,16 @@ Route::group(['prefix' => 'projects'], function() {
     Route::get('/{title}', 'ProjectController@detail')->name('projectDetail');
 });
 
+//UserController, User Moderation system
+Route::group(['prefix' => 'users'], function() {
+    Route::group(['middleware' => 'auth'], function () {
+        Route::get('/edit', 'UserController@editForm')->name('userEditForm');
+        Route::put('/edit', 'UserController@edit')->name('userEdit');
+        Route::put('/avatar','UserController@changeAvatar')->name('userAvatarChange');
+    });
+    Route::get('/{name}', 'UserController@detail')->name('userDetail');
+});
+
 //Admin group functions
 Route::group(['prefix'=>'admin', 'middleware' => ['auth','verified']], function() {
     //Admin homepage
@@ -86,11 +96,40 @@ Route::group(['prefix'=>'admin', 'middleware' => ['auth','verified']], function(
     Route::delete('/posts/{id}/comments/{commentId}','CommentController@remove')->name('adminCommentList')->middleware('rules:comment_manage');
 
     //Admin UserController, admin User system
-    Route::group(['prefix'=>'users', 'middleware'=>'rules:user_admin'], function() {
-        Route::get('/', 'UserController@index')->name('userList');
-        Route::get('/{name}', 'UserController@editForm')->name('userEditForm');
-        Route::put('/{name}', 'UserController@edit')->name('userEdit');
-        Route::delete('/{name}', 'UserController@remove')->name('userRemove');
+    Route::group(['prefix'=>'users'], function() {
+        Route::group(['middleware'=>['rules:user_list']], function() {
+            Route::get('/', 'UserController@index')->name('userList');
+        });
+
+        Route::group(['middleware'=>'rules:moderation'], function() {
+            Route::group(['prefix'=>'banned'], function() {
+                Route::get('/','BanController@bannedList')->name('bannedUserList');
+                Route::get('/{id}','BanController@userBanList')->name('userBanList');
+                Route::put('/{id}/unban','BanController@unban')->name('userUnbanAll');
+                Route::put('/{id}/unban/{ban}','BanController@unban')->name('userUnban');
+                Route::delete('/{id}/unban/{ban}','BanController@banDelete')->name('userBanDelete');
+            });
+
+            Route::group(['prefix' => 'ban'], function() {
+                Route::group(['prefix' => 'types'], function() {
+                    Route::get('/','BanController@banTypeList')->name('userBanTypeList');
+                    Route::get('/add','BanController@banTypeForm')->name('userBanTypeAddForm');
+                    Route::post('/add','BanController@banTypeSend')->name('userBanTypeAdd');
+                    Route::get('/{id}','BanController@banTypeForm')->name('userBanTypeEditForm');
+                    Route::put('/{id}','BanController@banTypeSend')->name('userBanTypeEdit');
+                    Route::delete('/{id}','BanController@banTypeDelete')->name('userBanTypeDelete');
+                });
+
+                Route::get('/{id}','BanController@banForm')->name('userBanForm');
+                Route::post('/{id}','BanController@ban')->name('userBan');
+            });
+        });
+
+        Route::group(['middleware'=>'rules:user_admin'], function() {
+            Route::get('/{name}', 'UserController@adminEditForm')->name('userEditForm');
+            Route::put('/{name}', 'UserController@adminEdit')->name('userEdit');
+            Route::delete('/{name}', 'UserController@remove')->name('userRemove');
+        });
     });
 
     //Admin RoleController, admin Role System

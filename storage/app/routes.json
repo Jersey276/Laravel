@@ -1,11 +1,26 @@
 {
     "user" : {
         "name" : "Utilisateurs",
-        "rules" : "user_admin",
         "links" : {
             "user_lists" : {
                 "name" : "Lister les utilisateurs",
+                "rules" : "user_list",
                 "links" : "/admin/users"
+            },
+            "admin_banned_users": {
+                "name": "Gérer les utilisateurs bannis",
+                "rules" : "moderation",
+                "links" : "/admin/users/banned" 
+            },
+            "admin_ban_type_list": {
+                "name": "Gérer les motifs de bannissements",
+                "rules" : "moderation",
+                "links" : "/admin/users/ban/types"
+            },
+            "admin_ban_type_add": {
+                "name": "Ajouter un motif de banissement",
+                "rules" : "moderation",
+                "links" : "/admin/users/ban/types/add"
             }
         }
     },
@@ -78,11 +93,6 @@
                 "name" : "Consulter les journeaux",
                 "rules" : "moderation",
                 "links" : "/admin/log"
-            },
-            "admin_banned_users": {
-                "name": "Gérer les utilisateurs bannis",
-                "rules" : "moderation",
-                "links" : "/admin/users/banned" 
             },
             "contact": {
                 "name" : "Consulter les réponses du formulaire de contacts",
