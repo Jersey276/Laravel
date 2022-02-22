@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Managers\RuleManager;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +16,10 @@ class PostController extends Controller
 
     public function index()
     {
-        return view('posts/list',['posts' => Post::all()]);
+        if(Auth::user() && RuleManager::checkRule('project_crud', Auth::user())) {
+            return view('posts/list',['posts' => Post::all()]);
+        }
+        return view('posts/list',['posts' => Post::where(['isVisible' => true])->get()]);
     }
 
     public function adminIndex()
@@ -25,7 +29,9 @@ class PostController extends Controller
     
     public function detail(string $title)
     {
-        return view('posts/detail',['post' => Post::where(['title' => $title])->firstOrFail()]);
+        $post = Post::where(['title' => $title])->firstOrFail();
+        $this->authorize('view', $post);
+        return view('posts/detail',['post' => $post]);
     }
 
     public function create(Request $request)
@@ -33,7 +39,8 @@ class PostController extends Controller
         $post = new Post([
             'title' => $request->title,
             'slug' => $request->slug,
-            'text' => $request->text
+            'text' => $request->text,
+            'isVisible' => $request->isVisible != null,
         ]);
         $post->author()->associate(Auth::user());
         if($post->save()) {
@@ -56,7 +63,8 @@ class PostController extends Controller
         if ($post->update([
         'title' => $request->title,
         'slug' => $request->slug,
-        'text' => $request->text
+        'text' => $request->text,
+        'isVisible' => $request->isVisible != null,
         ])) {
             $this->successFlash($request, 'Le post '. $post->title.' à été mis à jour');
         } else {

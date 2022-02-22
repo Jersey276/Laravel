@@ -30,7 +30,17 @@
         <input type="text" class="form-control" name="slug" placeholder="Description du projet" value="{{isset($project) ? $project->slug : null}}">
         <label for="slug" class="form-label">Description du projet</label>
     </div>
-        <x-tiny-mce name="text" :text="isset($project) ? $project->text : null"/>
-    <input type="submit" class="btn btn-success" value="Poster">
+        <x-tiny-mce name="text" :text="isset($project) ? $project->text : null"/>*
+        <div class="mt-3 d-flex flex-row justify-content-between">
+            <div class="form-check form-switch">
+                @if (isset($project) && $project->isVisible)
+                    <input class="form-check-input" name="isVisible" type="checkbox" id="flexSwitchCheckDefault" checked>
+                @else
+                    <input class="form-check-input" name="isVisible" type="checkbox" id="flexSwitchCheckDefault">
+                @endif
+                <label class="form-check-label" for="flexSwitchCheckDefault">Visible</label>
+            </div>
+            <input type="submit" class="btn btn-success" value="Poster">
+        </div>
 </form>
 @endsection

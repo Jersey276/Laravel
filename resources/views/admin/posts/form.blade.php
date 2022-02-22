@@ -22,8 +22,18 @@
             <label class="form-label">Description</label>
         </div>
         <x:tiny-mce name="text" :text="isset($post) ? $post->text : null" />
-    @csrf
-        <input class="btn btn-success" type="submit">
+        <div class="mt-3 d-flex flex-row justify-content-between">
+            <div class="form-check form-switch">
+                @if (isset($post) && $post->isVisible)
+                    <input class="form-check-input" name="isVisible" type="checkbox" id="flexSwitchCheckDefault" checked>
+                @else
+                    <input class="form-check-input" name="isVisible" type="checkbox" id="flexSwitchCheckDefault">
+                @endif
+                <label class="form-check-label" for="flexSwitchCheckDefault">Visible</label>
+            </div>
+            <input type="submit" class="btn btn-success" value="Poster">
+        </div>
+        @csrf
     </form>
 
 @endsection

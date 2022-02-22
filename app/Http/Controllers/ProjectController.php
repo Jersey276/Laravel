@@ -34,7 +34,8 @@ class ProjectController extends Controller
             'slug' => $request->slug,
             'text' => $request->text,
             'startedAt' => $request->startedAt,
-            'finishedAt' => $request->finishedAt
+            'finishedAt' => $request->finishedAt,
+            'isVisible' => $request->isVisible != null
         ]);
         if($project->save()) {
             $this->successFlash($request, 'Le projet à été crée');
@@ -57,7 +58,8 @@ class ProjectController extends Controller
         'slug' => $request->slug,
         'text' => $request->text,
         'startedAt' => $request->startedAt,
-        'finishedAt' => $request->finishedAt
+        'finishedAt' => $request->finishedAt,
+        'isVisible' => $request->isVisible != null
         ])) {
             $this->successFlash($request, 'Le projet '. $project->title.' à été mis à jour');
         } else {

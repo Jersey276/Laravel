@@ -12,7 +12,8 @@ class Post extends Model
     protected $fillable = [
         'title',
         'slug',
-        'text'
+        'text',
+        'isVisible',
     ];
 
     public function author()

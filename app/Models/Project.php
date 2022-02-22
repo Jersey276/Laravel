@@ -22,6 +22,7 @@ class Project extends Model
         'technology',
         'startedAt',
         'finishedAt',
+        'isVisible',
     ];
 
     public function displayLink()
