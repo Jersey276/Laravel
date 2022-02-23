@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class HomeController extends Controller
 {
@@ -23,7 +24,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $post = Post::all()->last();
+        $post = Post::where(['isVisible' => true])->get()->last();
+        $path = storage_path('app\public\img');
+        $files = File::allFiles($path);
         return view('home', ['post' => $post]);
     }
 

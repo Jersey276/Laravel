@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'failed' => 'These credentials do not match our records.',
+    'failed' => 'Vos informations ne correspondent pas avec nos données.',
     'password' => 'Le mot de passe fournis n\'est pas correcte.',
     'throttle' => 'Trop d\'essai de connexion. Veuiller ressayer dans :seconds secondes.',
 
